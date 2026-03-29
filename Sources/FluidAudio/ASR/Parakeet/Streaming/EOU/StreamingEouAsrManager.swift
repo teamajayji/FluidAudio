@@ -425,6 +425,15 @@ public actor StreamingEouAsrManager {
         processedChunks = 0
     }
 
+       public func resetAfterEOU() {
+        accumulatedTokenIds.removeAll()
+        eouDetected = false
+        eouFirstDetectedAt = nil
+        // We don't reset the rnntDecoder state or loopback caches here, 
+        // as the audio context should be preserved across utterances.
+        print("[DEBUG] [StreamingEouAsrManager] State reset after EOU.")
+    }
+
     public func injectSilence(_ seconds: Double) {
         let silenceSamples = Int(seconds * 16000)
         audioBuffer.append(contentsOf: Array(repeating: 0.0, count: silenceSamples))
